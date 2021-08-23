@@ -1,0 +1,51 @@
+#!/usr/bin/env php
+<?php
+
+require_once __DIR__ . "/vendor/autoload.php";
+
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+
+
+// 入力ファイルパス
+$file_path     = $argv[1] ?? null;
+// 出力フォーマット（csv / json）
+$output_format = $argv[2] ?? null;
+// 出力ファイルパス
+$output_file   = $argv[3] ?? null;
+
+
+$reader      = new Xlsx();
+$spreadsheet = $reader->load($file_path)->getSheetByName("RAW");
+
+$dates = [];
+foreach ($spreadsheet->getRowIterator() as $row) {
+
+    // 1行目は項目名なのでスキップ。
+    if ($row->getRowIndex() === 1)
+        continue;
+
+    $date_cereal = (int) $spreadsheet->getCell("A" . $row->getRowIndex())->getValue();
+    // シリアル値からUNIX時間に変換
+    $timestamp   = ($date_cereal - 25569) * 60 * 60 * 24;
+    $dates[]     = date('Y/m/d', $timestamp);
+}
+
+
+
+if (strtolower($output_format) === "json") {
+    file_put_contents(
+        $output_file,
+        json_encode(array_count_values($dates), JSON_PRETTY_PRINT)
+    );
+}
+
+if (strtolower($output_format) === "csv") {
+
+    $result = "date,number\n";
+    foreach (array_count_values($dates) as $date => $number) {
+        $result .= "$date,$number\n";
+    }
+    file_put_contents($output_file, $result);
+}
+
+// TODO : エラー系の充実。
