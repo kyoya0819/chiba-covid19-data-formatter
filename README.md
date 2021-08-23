@@ -31,7 +31,7 @@ $ php artisan data.xlsx csv data.csv
 ```json
 {
     "日付": "感染者数",
-    ...
+    "...": "..."
 }
 ```
 
@@ -40,7 +40,7 @@ $ php artisan data.xlsx csv data.csv
 ```csv
 date,number
 日付,感染者数
-...
+...,...
 ```
 
 ## ライセンス
