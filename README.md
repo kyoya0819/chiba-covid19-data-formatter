@@ -1,4 +1,4 @@
-# chiba-covid19-data-format
+# chiba-covid19-data-formatter
 
 使いづらかったので作りました。
 
@@ -49,4 +49,4 @@ date,number
 
 ## その他
 
-1時間ぐらいで作ったのでissue / PRお待ちしています！！
+issue / PRお待ちしています！！
